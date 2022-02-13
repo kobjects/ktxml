@@ -1,8 +1,6 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/ // for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
 package org.xmlpull.v2
 
-import org.xmlpull.v1.XmlPullParserException
-import kotlin.Throws
 
 /**
  * XML Pull Parser is an interface that defines parsing functionality provided
@@ -198,7 +196,7 @@ interface XmlPullParser {
      *
      *
      * **Please note:** parser implementations
-     * may provide more efifcient lookup, e.g. using a Hashtable.
+     * may provide more efficient lookup, e.g. using a Hashtable.
      * The 'xml' prefix is bound to "http://www.w3.org/XML/1998/namespace", as
      * defined in the
      * [Namespaces in XML](http://www.w3.org/TR/REC-xml-names/#ns-using)
@@ -211,7 +209,7 @@ interface XmlPullParser {
      *
      * @see .getNamespaceUri
      */
-    fun getNamespace(prefix: String): String {
+    fun getNamespace(prefix: String): String? {
         for (i in getNamespaceCount(depth) - 1 downTo 0) {
             if (getNamespacePrefix(i) == prefix) {
                 return getNamespaceUri(i);
@@ -220,7 +218,7 @@ interface XmlPullParser {
         return when (prefix) {
             "xml" -> "http://www.w3.org/XML/1998/namespace"
             "xmlns" -> "http://www.w3.org/2000/xmlns/"
-            else -> ""
+            else -> null
         }
     }
     // --------------------------------------------------------------------------

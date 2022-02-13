@@ -2,9 +2,13 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    id("maven-publish")
 }
 
-version = "1.0"
+
+group = "org.kobjects.kxml3"
+version = "0.1.0"
+
 
 kotlin {
     android()
@@ -13,11 +17,11 @@ kotlin {
     //iosSimulatorArm64() sure all ios dependencies support this target
 
     cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
+        summary = "Kotlin version of Kxml2"
+        homepage = "https://github.com/kobjects/kxml3"
         ios.deploymentTarget = "14.1"
         framework {
-            baseName = "shared"
+            baseName = "kxml3"
         }
     }
     

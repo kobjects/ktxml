@@ -3,28 +3,41 @@ package org.kobjects.kxml3.io
 import org.xmlpull.v2.EventType
 import org.xmlpull.v2.XmlPullParser
 import org.xmlpull.v2.XmlPullParserException
-import java.io.Reader
-import java.lang.*
 import kotlin.Boolean
 import kotlin.String
 
 
 class KXmlParser(
-    val reader: Reader,
+    val source: String,
     val processNsp: Boolean = false,
     val relaxed: Boolean = false,
     val entityResolver: (String) -> String? = { null }
 )  : XmlPullParser {
 
-
     companion object {
+        const val CARRIAGE_RETURN_CODE = 13
+        const val NEWLINE_CODE = 10
+
         const val UNEXPECTED_EOF = "Unexpected EOF"
         const val ILLEGAL_TYPE = "Wrong event type";
+
+        fun <T> arraycopy(src: Array<T>, srcPos: Int, dst: Array<T>, dstPos: Int, count: Int) {
+            src.copyInto(dst, dstPos, srcPos, srcPos + count)
+        }
+
+        fun arraycopy(src: IntArray, srcPos: Int, dst: IntArray, dstPos: Int, count: Int) {
+            src.copyInto(dst, dstPos, srcPos, srcPos + count)
+        }
+
+        fun arraycopy(src: CharArray, srcPos: Int, dst: CharArray, dstPos: Int, count: Int) {
+            src.copyInto(dst, dstPos, srcPos, srcPos + count)
+        }
+
 
         private fun ensureCapacity(arr: Array<String>, required: Int): Array<String> {
             if (arr.size >= required) return arr
             val bigger =Array<String>(required + 16) { "" }
-            System.arraycopy(arr, 0, bigger, 0, arr.size)
+            arraycopy(arr, 0, bigger, 0, arr.size)
             return bigger
         }
     }
@@ -42,9 +55,8 @@ class KXmlParser(
 
     // source
 
-    private var srcBuf = CharArray(8192)
     private var srcPos = 0
-    private var srcCount = 0
+    private val srcLen = source.length
 
     override var lineNumber = 0
     override var columnNumber = 0
@@ -72,7 +84,6 @@ class KXmlParser(
     private var peekCount = 0
     private var wasCR = false
 
-    @Throws(XmlPullParserException::class)
     private fun adjustNsp(): Boolean {
         var any = false
         var i = 0
@@ -103,7 +114,7 @@ class KXmlParser(
                     error("illegal empty namespace")
                 }
 
-                System.arraycopy(
+                arraycopy(
                     attributes,
                     i + 4,
                     attributes,
@@ -128,7 +139,7 @@ class KXmlParser(
                     if (attrNs == null && !relaxed) throw RuntimeException(
                         "Undefined Prefix: $attrPrefix in $this"
                     )
-                    attributes[i] = attrNs
+                    attributes[i] = attrNs ?: ""
                     attributes[i + 1] = attrPrefix
                     attributes[i + 2] = attrName
                 }
@@ -141,10 +152,11 @@ class KXmlParser(
             prefix = name.substring(0, cut)
             name = name.substring(cut + 1)
         }
-        namespace = getNamespace(prefix)
-        if (namespace == "" && prefix != "") {
+        val namespace = getNamespace(prefix)
+        if (namespace == null && prefix != "") {
             error("undefined prefix: $prefix")
         }
+        this.namespace = namespace ?: ""
         return any
     }
 
@@ -400,7 +412,7 @@ class KXmlParser(
         isWhitespace = isWhitespace and (c <= ' '.code)
         if (txtPos + 1 >= txtBuf.size) { // +1 to have enough space for 2 surrogates, if needed
             val bigger = CharArray(txtPos * 4 / 3 + 4)
-            System.arraycopy(txtBuf, 0, bigger, 0, txtPos)
+            arraycopy(txtBuf, 0, bigger, 0, txtPos)
             txtBuf = bigger
         }
         if (c > 0xffff) {
@@ -482,7 +494,7 @@ class KXmlParser(
         elementStack[sp + 3] = name
         if (depth >= nspCounts.size) {
             val bigger = IntArray(depth + 4)
-            System.arraycopy(nspCounts, 0, bigger, 0, nspCounts.size)
+            arraycopy(nspCounts, 0, bigger, 0, nspCounts.size)
             nspCounts = bigger
         }
         nspCounts[depth] = nspCounts[depth - 1]
@@ -566,7 +578,7 @@ class KXmlParser(
             if (next == '&'.code) {
                 if (!resolveEntities) break
                 pushEntity()
-            } else if (next == '\n'.code && eventType === EventType.START_TAG) {
+            } else if (next == NEWLINE_CODE && eventType === EventType.START_TAG) {
                 read()
                 push(' '.code)
             } else push(read())
@@ -583,6 +595,7 @@ class KXmlParser(
         if (a != c.code) error("expected: '" + c + "' actual: '" + a.toChar() + "'")
     }
 
+    // delegates to peek as peek handles cr/lf normalization.
     private fun read(): Int {
         val result: Int
         if (peekCount == 0) result = peek(0) else {
@@ -595,7 +608,7 @@ class KXmlParser(
         //		}
         peekCount--
         columnNumber++
-        if (result == '\n'.code) {
+        if (result == NEWLINE_CODE) {
             lineNumber++
             columnNumber = 1
         }
@@ -605,20 +618,18 @@ class KXmlParser(
     /** Does never read more than needed  */
     private fun peek(pos: Int): Int {
         while (pos >= peekCount) {
-            var nw: Int
-            if (srcBuf.size <= 1) nw = reader.read() else if (srcPos < srcCount) nw =
-                srcBuf[srcPos++].code else {
-                srcCount = reader.read(srcBuf, 0, srcBuf.size)
-                nw = if (srcCount <= 0) -1 else srcBuf[0].code
-                srcPos = 1
-            }
-            if (nw == '\r'.code) {
+            val nw: Int = if (srcPos == srcLen) -1 else source[srcPos++].code
+            if (nw == CARRIAGE_RETURN_CODE) {
                 wasCR = true
-                peek[peekCount++] = '\n'.code
+                peek[peekCount++] = NEWLINE_CODE
             } else {
-                if (nw == '\n'.code) {
-                    if (!wasCR) peek[peekCount++] = '\n'.code
-                } else peek[peekCount++] = nw
+                if (nw == NEWLINE_CODE) {
+                    if (!wasCR) {
+                        peek[peekCount++] = NEWLINE_CODE
+                    }
+                } else {
+                    peek[peekCount++] = nw
+                }
                 wasCR = false
             }
         }

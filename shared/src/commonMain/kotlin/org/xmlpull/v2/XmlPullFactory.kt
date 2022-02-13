@@ -1,8 +1,5 @@
 package org.xmlpull.v2
 
-import java.io.Reader
-import java.io.InputStream
-
 /**
  * The parser you are using will provide an
  *  Implementations may support additional features.
@@ -30,16 +27,8 @@ interface XmlPullFactory {
     var relaxed: Boolean
 
     /**
-     * Creates a parser operating on the given reader. If the entity declaration
-     * declares a different encoding, it is ignored. If the encoding is not known, please
-     * use the input stream based method instead.
+     * Creates a parser operating on the given string.
      */
-    fun createParser(reader: Reader): XmlPullParser
-
-    /**
-     * The encoding is read from the xml declaration (defaults to UTF-8)
-     */
-    fun createParser(inputStream: InputStream): XmlPullParser
-
+    fun createParser(source: String): XmlPullParser
 
 }
