@@ -8,7 +8,7 @@ import kotlin.String
 
 
 class KXmlParser(
-    val source: String,
+    val source: CharIterator,
     val processNsp: Boolean = false,
     val relaxed: Boolean = false,
     val entityResolver: (String) -> String? = { null }
@@ -54,9 +54,6 @@ class KXmlParser(
     private var unresolved = false
 
     // source
-
-    private var srcPos = 0
-    private val srcLen = source.length
 
     override var lineNumber = 0
     override var columnNumber = 0
@@ -618,7 +615,7 @@ class KXmlParser(
     /** Does never read more than needed  */
     private fun peek(pos: Int): Int {
         while (pos >= peekCount) {
-            val nw: Int = if (srcPos == srcLen) -1 else source[srcPos++].code
+            val nw: Int = if (!source.hasNext()) -1 else source.nextChar().code
             if (nw == CARRIAGE_RETURN_CODE) {
                 wasCR = true
                 peek[peekCount++] = NEWLINE_CODE

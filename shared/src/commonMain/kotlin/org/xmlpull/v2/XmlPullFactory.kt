@@ -27,8 +27,12 @@ interface XmlPullFactory {
     var relaxed: Boolean
 
     /**
+     * Creates a parser operating on the given character iterator.
+     */
+    fun createParser(source: CharIterator): XmlPullParser
+
+    /**
      * Creates a parser operating on the given string.
      */
-    fun createParser(source: String): XmlPullParser
-
+    fun createParser(source: String) = createParser(source.iterator())
 }

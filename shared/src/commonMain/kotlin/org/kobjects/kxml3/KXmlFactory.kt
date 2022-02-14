@@ -10,11 +10,9 @@ class KXmlFactory(
     override var entityResolver: (String) -> String? = { it -> null },
     override var relaxed: Boolean = false
 ) : XmlPullFactory {
-    override fun createParser(source: String) = KXmlParser(
+    override fun createParser(source: CharIterator) = KXmlParser(
         source = source,
         processNsp = namespaceAware,
         entityResolver = entityResolver,
         relaxed = relaxed)
-
-
 }
