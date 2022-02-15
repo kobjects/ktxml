@@ -6,7 +6,7 @@ This is work in progress and the API is likely to change.
 
 The most significant changes are:
 
-- Replaced the Reader as input with String and CharIterator support, as Java streams are not available for Kotlin native.
+- Replaced the Reader as input with CharIterator (and String) support, as Java streams are not available for Kotlin native.
 - Reduced the number of places where null is returned
 
 The xmlpull v2 api will me migrated to a separate repository when finished.
