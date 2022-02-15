@@ -7,7 +7,7 @@ plugins {
 
 
 group = "org.kobjects.kxml3"
-version = "0.1.0"
+version = "0.1.1"
 
 
 kotlin {
@@ -17,7 +17,7 @@ kotlin {
     //iosSimulatorArm64() sure all ios dependencies support this target
 
     cocoapods {
-        summary = "Kotlin version of Kxml2"
+        summary = "Kotlin version of Kxml"
         homepage = "https://github.com/kobjects/kxml3"
         ios.deploymentTarget = "14.1"
         framework {
