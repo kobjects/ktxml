@@ -8,3 +8,4 @@ pluginManagement {
 
 rootProject.name = "kxml3"
 include(":core")
+includeBuild("convention-plugins")

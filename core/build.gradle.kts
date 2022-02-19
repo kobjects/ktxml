@@ -2,12 +2,13 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
-    id("maven-publish")
+//    id("maven-publish")
+    id("convention.publication")
 }
 
 
 group = "org.kobjects.kxml3"
-version = "0.1.1"
+version = "0.1.2"
 
 
 kotlin {
