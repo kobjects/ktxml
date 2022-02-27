@@ -16,6 +16,7 @@ kotlin {
     iosX64()
     iosArm64()
     //iosSimulatorArm64() sure all ios dependencies support this target
+    jvm("desktop")
 
     cocoapods {
         summary = "Kotlin version of Kxml"
@@ -59,6 +60,9 @@ kotlin {
             iosArm64Test.dependsOn(this)
             //iosSimulatorArm64Test.dependsOn(this)
         }
+
+        val desktopMain by getting
+        val desktopTest by getting
     }
 }
 
