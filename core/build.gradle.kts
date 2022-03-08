@@ -8,7 +8,7 @@ plugins {
 
 
 group = "org.kobjects.kxml3"
-version = "0.1.2"
+version = "0.1.3"
 
 
 kotlin {
@@ -17,6 +17,10 @@ kotlin {
     iosArm64()
     //iosSimulatorArm64() sure all ios dependencies support this target
     jvm("desktop")
+    js(IR) {
+        //  useCommonJs()
+        browser()
+    }
 
     cocoapods {
         summary = "Kotlin version of Kxml"
@@ -63,6 +67,10 @@ kotlin {
 
         val desktopMain by getting
         val desktopTest by getting
+
+        val jsMain by getting
+        val jsTest by getting
+
     }
 }
 
