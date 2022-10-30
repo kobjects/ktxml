@@ -6,6 +6,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "kxml3"
+rootProject.name = "ktxml"
 include(":core")
 includeBuild("convention-plugins")

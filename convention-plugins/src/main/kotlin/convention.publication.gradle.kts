@@ -61,9 +61,9 @@ publishing {
 
         // Provide artifacts information requited by Maven Central
         pom {
-            name.set("kxml3")
-            description.set("Kxml3 Kotlin XmlPull library")
-            url.set("https://github.com/kobjects/kxml3")
+            name.set("ktxml")
+            description.set("KtXml Kotlin XML 'pull' parser library")
+            url.set("https://github.com/kobjects/ktxml")
 
             licenses {
                 license {
@@ -79,7 +79,7 @@ publishing {
                 }
             }
             scm {
-                url.set("https://github.com/kobjects/kxml3")
+                url.set("https://github.com/kobjects/ktxml")
             }
 
         }

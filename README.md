@@ -1,4 +1,4 @@
-# kxml3
+# KtXml
 
 The goal of this project is to provide a minimal platform-agnostic non-validating XML pull parser based on kxml2 and to explore/shape a kotlin version of the xmlpull api.
 

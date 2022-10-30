@@ -1,4 +1,4 @@
-package org.xmlpull.v2
+package org.kobjects.ktxml.api
 
 class XmlPullParserException(
     message: String,

@@ -7,7 +7,7 @@ plugins {
 }
 
 
-group = "org.kobjects.kxml3"
+group = "org.kobjects.ktxml"
 version = "0.1.3"
 
 
@@ -24,10 +24,10 @@ kotlin {
 
     cocoapods {
         summary = "Kotlin version of Kxml"
-        homepage = "https://github.com/kobjects/kxml3"
+        homepage = "https://github.com/kobjects/ktxml"
         ios.deploymentTarget = "14.1"
         framework {
-            baseName = "kxml3"
+            baseName = "ktxml"
         }
     }
     

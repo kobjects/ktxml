@@ -1,40 +1,18 @@
-/* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/ // for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
-package org.xmlpull.v2
-
+package org.kobjects.ktxml.api
 
 /**
- * XML Pull Parser is an interface that defines parsing functionality provided
- * in [XMLPULL V2 API](http://www.xmlpull.org/) (visit this website to
- * learn more about API and its implementations).
- *
- *
- * There are following different
- * kinds of parser depending on which features are set:
- *  * **non-validating** parser as defined in XML 1.0 spec when
- * FEATURE_PROCESS_DOCDECL is set to true
- *  * **validating parser** as defined in XML 1.0 spec when
- * FEATURE_VALIDATION is true (and that implies that FEATURE_PROCESS_DOCDECL is true)
- *  * when FEATURE_PROCESS_DOCDECL is false (this is default and
- * if different value is required necessary must be changed before parsing is started)
- * then parser behaves like XML 1.0 compliant non-validating parser under condition that
- * *no DOCDECL is present* in XML documents
- * (internal entites can still be defined with defineEntityReplacementText()).
- * This mode of operation is intened **for operation in constrained environments** such as J2ME.
- *
- *
- *
+ * KtXmplParser is an interface that defines parsing functionality based on
+ * the XMLPULL V2 API, adapted to Kotlin
  *
  * There are two key methods: next() and nextToken(). While next() provides
  * access to high level parsing events, nextToken() allows access to lower
  * level tokens.
- *
  *
  * The current event state of the parser
  * can be determined by calling the
  * [getEventType()](#getEventType()) method.
  * Initially, the parser is in the [START_DOCUMENT](#START_DOCUMENT)
  * state.
- *
  *
  * The method [next()](#next()) advances the parser to the
  * next event. The int value returned from next determines the current parser
@@ -50,77 +28,6 @@ package org.xmlpull.v2
 </dd> * <dt>[END_TAG](#END_TAG)</dt><dd> An end tag was read
 </dd> * <dt>[END_DOCUMENT](#END_DOCUMENT)</dt><dd> No more events are available
 </dd></dl> *
- *
- *
- * after first next() or nextToken() (or any other next*() method)
- * is called user application can obtain
- * XML version, standalone and encoding from XML declaration
- * in following ways:
- *  * **version**:
- * getProperty(&quot;[http://xmlpull.org/v1/doc/properties.html#xmldecl-version](http://xmlpull.org/v1/doc/properties.html#xmldecl-version)&quot;)
- * returns String ("1.0") or null if XMLDecl was not read or if property is not supported
- *  * **standalone**:
- * getProperty(&quot;[http://xmlpull.org/v1/doc/features.html#xmldecl-standalone](http://xmlpull.org/v1/doc/features.html#xmldecl-standalone)&quot;)
- * returns Boolean: null if there was no standalone declaration
- * or if property is not supported
- * otherwise returns Boolean(true) if standalon="yes" and Boolean(false) when standalone="no"
- *  * **encoding**: obtained from getInputEncoding()
- * null if stream had unknown encoding (not set in setInputStream)
- * and it was not declared in XMLDecl
- *
- *
- * A minimal example for using this API may look as follows:
- * <pre>
- * import java.io.IOException;
- * import java.io.StringReader;
- *
- * import org.xmlpull.v1.XmlPullParser;
- * import org.xmlpull.v1.[XmlPullParserException.html](XmlPullParserException.html);
- * import org.xmlpull.v1.[XmlPullParserFactory](XmlPullParserFactory.html);
- *
- * public class SimpleXmlPullApp
- * {
- *
- * public static void main (String args[])
- * throws XmlPullParserException, IOException
- * {
- * XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
- * factory.setNamespaceAware(true);
- * XmlPullParser xpp = factory.newPullParser();
- *
- * xpp.[setInput](#setInput)( new StringReader ( "&lt;foo>Hello World!&lt;/foo>" ) );
- * int eventType = xpp.getEventType();
- * while (eventType != XmlPullParser.END_DOCUMENT) {
- * if(eventType == XmlPullParser.START_DOCUMENT) {
- * System.out.println("Start document");
- * } else if(eventType == XmlPullParser.END_DOCUMENT) {
- * System.out.println("End document");
- * } else if(eventType == XmlPullParser.START_TAG) {
- * System.out.println("Start tag "+xpp.[getName()](#getName()));
- * } else if(eventType == XmlPullParser.END_TAG) {
- * System.out.println("End tag "+xpp.getName());
- * } else if(eventType == XmlPullParser.TEXT) {
- * System.out.println("Text "+xpp.[getText()](#getText()));
- * }
- * eventType = xpp.next();
- * }
- * }
- * }
-</pre> *
- *
- *
- * The above example will generate the following output:
- * <pre>
- * Start document
- * Start tag foo
- * Text Hello World!
- * End tag foo
-</pre> *
- *
- *
- * For more details on API usage, please refer to the
- * quick Introduction available at [http://www.xmlpull.org](http://www.xmlpull.org)
- *
  *
  * @author [Stefan Haustein](http://www-ai.cs.uni-dortmund.de/PERSONAL/haustein.html)
  * @author [Aleksander Slominski](http://www.extreme.indiana.edu/~aslom/)

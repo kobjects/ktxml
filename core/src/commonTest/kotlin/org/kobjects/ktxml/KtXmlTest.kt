@@ -1,14 +1,15 @@
-package org.kobjects.kxml3
+package org.kobjects.ktxml
 
-import org.xmlpull.v2.EventType
+import org.kobjects.ktxml.api.EventType
+import org.kobjects.ktxml.mini.MiniXmlPullParser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class KXml3Test {
+class KtXmlTest {
 
     @Test
     fun testBasicParsing() {
-        val parser = KXmlFactory().createParser("<text>Hello World</text>")
+        val parser = MiniXmlPullParser("<text>Hello World</text>".iterator())
         assertEquals(EventType.START_DOCUMENT, parser.eventType)
         assertEquals(EventType.START_TAG, parser.next())
         assertEquals("Hello World", parser.nextText())

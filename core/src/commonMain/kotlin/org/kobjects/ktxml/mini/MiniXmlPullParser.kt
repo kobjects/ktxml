@@ -1,15 +1,17 @@
-package org.kobjects.kxml3.io
+package org.kobjects.ktxml.mini
 
-import org.xmlpull.v2.EventType
-import org.xmlpull.v2.XmlPullParser
-import org.xmlpull.v2.XmlPullParserException
+import org.kobjects.ktxml.api.EventType
+import org.kobjects.ktxml.api.XmlPullParser
+import org.kobjects.ktxml.api.XmlPullParserException
 import kotlin.Boolean
 import kotlin.String
 
-
-class KXmlParser(
+/**
+ * A simple non-validating xml pull parser.
+ */
+class MiniXmlPullParser(
     val source: CharIterator,
-    val processNsp: Boolean = false,
+    val processNamespaces: Boolean = false,
     val relaxed: Boolean = false,
     val entityResolver: (String) -> String? = { null }
 )  : XmlPullParser {
@@ -32,7 +34,6 @@ class KXmlParser(
         fun arraycopy(src: CharArray, srcPos: Int, dst: CharArray, dstPos: Int, count: Int) {
             src.copyInto(dst, dstPos, srcPos, srcPos + count)
         }
-
 
         private fun ensureCapacity(arr: Array<String>, required: Int): Array<String> {
             if (arr.size >= required) return arr
@@ -127,13 +128,13 @@ class KXmlParser(
             while (i >= 0) {
                 var attrName = attributes[i + 2]
                 val cut = attrName.indexOf(':')
-                if (cut == 0 && !relaxed) throw RuntimeException(
+                if (cut == 0 && !relaxed) throw exception(
                     "illegal attribute name: $attrName at $this"
                 ) else if (cut != -1) {
                     val attrPrefix = attrName.substring(0, cut)
                     attrName = attrName.substring(cut + 1)
                     val attrNs = getNamespace(attrPrefix)
-                    if (attrNs == null && !relaxed) throw RuntimeException(
+                    if (attrNs == null && !relaxed) throw exception(
                         "Undefined Prefix: $attrPrefix in $this"
                     )
                     attributes[i] = attrNs ?: ""
@@ -165,11 +166,10 @@ class KXmlParser(
     }
 
     private fun exception(message: String): XmlPullParserException {
-        return XmlPullParserException(message, positionDescription,
-            lineNumber, columnNumber
+        return XmlPullParserException(
+            message, positionDescription, lineNumber, columnNumber
         )
     }
-
 
     /**
      * common base for next and nextToken. Clears the state, except from
@@ -225,7 +225,6 @@ class KXmlParser(
             }
         }
     }
-
 
     private fun parseLegacy(push: Boolean): EventType {
         var push = push
@@ -496,7 +495,7 @@ class KXmlParser(
         }
         nspCounts[depth] = nspCounts[depth - 1]
 
-        if (processNsp) {
+        if (processNamespaces) {
             adjustNsp()
         } else {
             namespace = ""
@@ -945,6 +944,4 @@ class KXmlParser(
         if (eventType !== EventType.END_TAG) exception("END_TAG expected")
         return result
     }
-
-
 }
