@@ -401,7 +401,7 @@ class MiniXmlPullParser(
     }
 
     private fun get(pos: Int): String {
-        return txtBuf.concatToString(pos, txtPos - pos)
+        return txtBuf.concatToString(pos, txtPos)
     }
 
     private fun push(c: Int) {

@@ -9,7 +9,7 @@ class KtXmlTest {
 
     @Test
     fun testBasicParsing() {
-        val parser = MiniXmlPullParser("<text>Hello World</text>".iterator())
+        val parser = MiniXmlPullParser("<text>Hello&#32;World</text>".iterator())
         assertEquals(EventType.START_DOCUMENT, parser.eventType)
         assertEquals(EventType.START_TAG, parser.next())
         assertEquals("Hello World", parser.nextText())
