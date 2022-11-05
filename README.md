@@ -4,7 +4,7 @@ Minimal platform-agnostic non-validating XML pull parser based on kxml2.
 
 This is still work in progress and the API might still change.
 
-The most significant changes are:
+The most significant changes (relative to XmlPull / KXml2) are:
 
 - Replaced the Reader as input with CharIterator support, as Java streams are not available for Kotlin native.
 - Reduced the number of places where null is returned
