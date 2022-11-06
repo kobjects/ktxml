@@ -1,22 +1,23 @@
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
-    id("com.android.library")
-//    id("maven-publish")
     id("convention.publication")
 }
 
 
 group = "org.kobjects.ktxml"
-version = "0.2.0"
+version = "0.2.1"
 
 
 kotlin {
-    android()
     iosX64()
     iosArm64()
     //iosSimulatorArm64() sure all ios dependencies support this target
-    jvm("desktop")
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+    }
     js(IR) {
         //  useCommonJs()
         browser()
@@ -39,13 +40,7 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        val androidMain by getting
-        val androidTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
-            }
-        }
+
         val iosX64Main by getting
         val iosArm64Main by getting
         //val iosSimulatorArm64Main by getting
@@ -65,20 +60,15 @@ kotlin {
             //iosSimulatorArm64Test.dependsOn(this)
         }
 
-        val desktopMain by getting
-        val desktopTest by getting
+        val jvmMain by getting
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+            }
+        }
 
         val jsMain by getting
         val jsTest by getting
 
-    }
-}
-
-android {
-    compileSdk = 32
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 21
-        targetSdk = 32
     }
 }
