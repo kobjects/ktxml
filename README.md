@@ -15,9 +15,24 @@ For a usage example, please take a look at the [test](https://github.com/kobject
 Import in `build.gradle.kts`:
 
 ```
-dependencies {
-    implementation("org.kobjects.ktxml:core:0.2.1")
-}
+(...)
+
+kotlin {
+  
+      (...)
+  
+      sourceSets {
+          val commonMain by getting {
+              dependencies {
+                  implementation("org.kobjects.ktxml:core:0.2.1")
+                  (...)
+              }
+          }
+          
+      (...)  
+              
 ```
+
+For an example, please refer to the shared demo module https://github.com/kobjects/konsole
 
 Brainstorming document: https://docs.google.com/document/d/1OXG5F5I-Gp-65cN8THWB1LMTZDnRS96CIBenPcusDDA/edit?usp=sharing
