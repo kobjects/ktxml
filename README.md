@@ -10,9 +10,9 @@ The most significant changes (relative to XmlPull / KXml2) are:
 - Reduced the number of places where null is returned
 - Factories removed
 
-For a usage example, please take a look at the [test](https://github.com/kobjects/ktxml/blob/main/core/src/commonTest/kotlin/org/kobjects/ktxml/KtXmlTest.kt).
+For a code example, please take a look at the [test](https://github.com/kobjects/ktxml/blob/main/core/src/commonTest/kotlin/org/kobjects/ktxml/KtXmlTest.kt).
 
-Import in `build.gradle.kts`:
+Import in `build.gradle.kts` for a "shared" KMM module:
 
 ```
 (...)
@@ -33,6 +33,6 @@ kotlin {
               
 ```
 
-For an example, please refer to the shared demo module https://github.com/kobjects/konsole
+For a usage / KMM dependency example, please refer to the shared demo module https://github.com/kobjects/konsole
 
 Brainstorming document: https://docs.google.com/document/d/1OXG5F5I-Gp-65cN8THWB1LMTZDnRS96CIBenPcusDDA/edit?usp=sharing
