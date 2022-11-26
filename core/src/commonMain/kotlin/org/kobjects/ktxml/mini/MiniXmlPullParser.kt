@@ -393,7 +393,13 @@ class MiniXmlPullParser(
                 '/'.code -> EventType.END_TAG
                 // Could be XML_DECL, too, but doesn't matter here.
                 '?'.code -> EventType.PROCESSING_INSTRUCTION
-                '!'.code -> if (peek(2) == '-'.code) EventType.COMMENT else EventType.DOCDECL
+                '!'.code -> if (peek(1) == '-'.code) {
+                                EventType.COMMENT
+                            } else if (peek(1) == '['.code) {
+                                EventType.CDSECT
+                            } else {
+                                EventType.DOCDECL
+                            }
                 else -> EventType.START_TAG
             }
             else -> EventType.TEXT
