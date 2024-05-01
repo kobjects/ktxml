@@ -31,6 +31,5 @@ kotlin {
               
 ```
 
-For a usage / KMM dependency example, please refer to the shared demo module https://github.com/kobjects/konsole
 
 Brainstorming document: https://docs.google.com/document/d/1OXG5F5I-Gp-65cN8THWB1LMTZDnRS96CIBenPcusDDA/edit?usp=sharing
