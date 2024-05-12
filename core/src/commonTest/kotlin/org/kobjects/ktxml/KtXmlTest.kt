@@ -45,6 +45,4 @@ class KtXmlTest {
         assertEquals(EventType.END_TAG, parser.nextToken())
         assertEquals(EventType.END_DOCUMENT, parser.nextToken())
     }
-
-
 }
