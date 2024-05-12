@@ -36,4 +36,15 @@ class KtXmlTest {
         assertEquals(EventType.END_TAG, parser.eventType)
         assertEquals(EventType.END_DOCUMENT, parser.next())
     }
+
+    @Test
+    fun testXmlDecl() {
+        val parser = MiniXmlPullParser("<?XML version=\"1.0\" ?><test/>".iterator())
+        assertEquals(EventType.START_DOCUMENT, parser.eventType)
+        assertEquals(EventType.START_TAG, parser.nextToken())
+        assertEquals(EventType.END_TAG, parser.nextToken())
+        assertEquals(EventType.END_DOCUMENT, parser.nextToken())
+    }
+
+
 }

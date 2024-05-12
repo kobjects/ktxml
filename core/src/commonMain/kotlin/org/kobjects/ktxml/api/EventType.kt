@@ -125,5 +125,6 @@ enum class EventType {
      */
     DOCDECL,
 
+    /** Internal state that is never reported */
     XML_DECL
 }

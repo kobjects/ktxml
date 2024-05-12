@@ -56,7 +56,7 @@ class MiniXmlPullParser(
 
     // source
 
-    override var lineNumber = 0
+    override var lineNumber = 1
     override var columnNumber = 0
 
     // text buffer
