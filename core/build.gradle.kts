@@ -6,7 +6,7 @@ plugins {
 
 
 group = "org.kobjects.ktxml"
-version = "0.2.3"
+version = "0.2.4"
 
 
 kotlin {
