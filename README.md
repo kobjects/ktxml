@@ -32,4 +32,16 @@ kotlin {
 ```
 
 
+## Use cases
+
+- Twine RSS Reader: https://github.com/msasikanth/twine/
+
+## FAQ
+
+### How can I stream data to the parser? 
+
+See https://github.com/kobjects/ktxml/issues/6
+
+
+
 Brainstorming document: https://docs.google.com/document/d/1OXG5F5I-Gp-65cN8THWB1LMTZDnRS96CIBenPcusDDA/edit?usp=sharing
