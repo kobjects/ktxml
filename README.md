@@ -1,6 +1,6 @@
 # KtXml
 
-![Maven Badge](https://maven-badges.herokuapp.com/maven-central/org.kobjects.ktxml/core/badge.svg)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.kobjects.ktxml/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.kobjects.ktxml/core)
 
 Minimal platform-agnostic non-validating XML pull parser based on kxml2.
 
