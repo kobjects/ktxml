@@ -36,7 +36,7 @@ kotlin {
 
 ## Use cases
 
-- Twine RSS Reader: https://github.com/msasikanth/twine/
+- [Twine RSS Reader](https://github.com/msasikanth/twine/tree/main/core/network/src/commonMain/kotlin/dev/sasikanth/rss/reader/core/network/parser)
 
 ## FAQ
 
