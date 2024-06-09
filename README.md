@@ -1,9 +1,5 @@
 # KtXml
 
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.kobjects/ktxml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.kobjects/ktxml)
-
-
 Minimal platform-agnostic non-validating XML pull parser based on kxml2.
 
 The most significant changes (relative to XmlPull / KXml2) are:
