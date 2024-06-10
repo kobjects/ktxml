@@ -10,9 +10,7 @@ The most significant changes (relative to XmlPull / KXml2) are:
 - Reduced the number of places where null is returned
 - Factories removed
 
-For a code example, please take a look at the [test](https://github.com/kobjects/ktxml/blob/main/core/src/commonTest/kotlin/org/kobjects/ktxml/KtXmlTest.kt).
-
-Import in `build.gradle.kts` for a "shared" KMM module:
+Import in `build.gradle.kts` for a "shared" KMP module:
 
 ```
 (...)
@@ -33,16 +31,49 @@ kotlin {
               
 ```
 
+KtXML is implemented in pure Kotlin, so it should work on all platforms supported by Kotlin.
+
+
+## Usage
+
+The most important calls in KtXml are `next()` and `nextToken()`. 
+
+- `next()` moves to the next "high level" token and returns the token type. It skips over 
+  comments and processing instructions and automatically decodes entity references. It also might
+  aggregate text content.
+
+- `nextToken()` moves to the next "low level" token including whitespace, processing instructions,
+  comments and entity references.
+
+After a call to `next()` or `nextToken()`, the details of the current token (such as tag attributes) 
+can be queried from the parser; see (XmlPullParser)[https://github.com/kobjects/ktxml/blob/main/core/src/commonMain/kotlin/org/kobjects/ktxml/api/XmlPullParser.kt]
+
+Typically these calls are used to implement recursive descend parsing of a specific XML format.
+
+Please always use the interface (XmlPullParser) and never the concrete parser implementation
+(MiniXmlPullParser) when passing the parser around.
+
+For a set of small code examples, please take a look at the [test](https://github.com/kobjects/ktxml/blob/main/core/src/commonTest/kotlin/org/kobjects/ktxml/KtXmlTest.kt).
+
 
 ## Use cases
 
-- [Twine RSS Reader](https://github.com/msasikanth/twine/tree/main/core/network/src/commonMain/kotlin/dev/sasikanth/rss/reader/core/network/parser)
+- [Twine RSS Reader Parsing Code](https://github.com/msasikanth/twine/tree/main/core/network/src/commonMain/kotlin/dev/sasikanth/rss/reader/core/network/parser)
 
 ## FAQ
 
 ### How can I stream data to the parser? 
 
 See https://github.com/kobjects/ktxml/issues/6
+
+### Where is Wbxml / kDom support from kXML2?
+
+If you are missing anything from kXML2, please file a feature request by creating a corresponding
+issue in the github issue tracker.
+
+### I have a different problem!
+
+Please file an issue using the github issue tracker.
 
 # Backgrond / Design
 
