@@ -46,7 +46,7 @@ The most important calls in KtXml are `next()` and `nextToken()`.
   comments and entity references.
 
 After a call to `next()` or `nextToken()`, the details of the current token (such as tag attributes) 
-can be queried from the parser; see (XmlPullParser)[https://github.com/kobjects/ktxml/blob/main/core/src/commonMain/kotlin/org/kobjects/ktxml/api/XmlPullParser.kt]
+can be queried from the parser; see [XmlPullParser](https://github.com/kobjects/ktxml/blob/main/core/src/commonMain/kotlin/org/kobjects/ktxml/api/XmlPullParser.kt)
 
 Typically these calls are used to implement recursive descend parsing of a specific XML format.
 
@@ -75,6 +75,6 @@ issue in the github issue tracker.
 
 Please file an issue using the github issue tracker.
 
-# Backgrond / Design
+# Background / Design
 
 Brainstorming document: https://docs.google.com/document/d/1OXG5F5I-Gp-65cN8THWB1LMTZDnRS96CIBenPcusDDA/edit?usp=sharing
