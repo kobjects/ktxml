@@ -16,6 +16,13 @@ class MiniXmlPullParser(
     val entityResolver: (String) -> String? = { null }
 )  : XmlPullParser {
 
+    constructor(
+        source: String,
+        processNamespaces: Boolean = false,
+        relaxed: Boolean = false,
+        entityResolver: (String) -> String? = { null }
+    ) : this(source.iterator(), processNamespaces, relaxed, entityResolver)
+
     companion object {
         const val CARRIAGE_RETURN_CODE = 13
         const val NEWLINE_CODE = 10
@@ -220,7 +227,7 @@ class MiniXmlPullParser(
                 }
                 else -> {
                     eventType = parseLegacy(token)
-                    if (eventType != EventType.XML_DECL) return
+                    return
                 }
             }
         }

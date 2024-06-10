@@ -9,7 +9,7 @@ class KtXmlTest {
 
     @Test
     fun testBasicParsing() {
-        val parser = MiniXmlPullParser("<text>Hello&#32;World</text>".iterator())
+        val parser = MiniXmlPullParser("<text>Hello&#32;World</text>")
         assertEquals(EventType.START_DOCUMENT, parser.eventType)
         assertEquals(EventType.START_TAG, parser.next())
         assertEquals("Hello World", parser.nextText())
@@ -41,6 +41,8 @@ class KtXmlTest {
     fun testXmlDecl() {
         val parser = MiniXmlPullParser("<?XML version=\"1.0\" ?><test/>".iterator())
         assertEquals(EventType.START_DOCUMENT, parser.eventType)
+        // XML_DECL reporting was fixed in version 0.3.0
+        assertEquals(EventType.XML_DECL, parser.nextToken())
         assertEquals(EventType.START_TAG, parser.nextToken())
         assertEquals(EventType.END_TAG, parser.nextToken())
         assertEquals(EventType.END_DOCUMENT, parser.nextToken())
