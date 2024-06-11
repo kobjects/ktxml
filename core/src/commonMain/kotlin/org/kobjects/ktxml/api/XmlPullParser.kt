@@ -1,51 +1,45 @@
 package org.kobjects.ktxml.api
 
 /**
- * KtXmplParser is an interface that defines parsing functionality based on
- * the XMLPULL V2 API, adapted to Kotlin
+ * KtXmplParser is an interface that defines parsing functionality based on the XMLPULL V2 API,
+ * adapted to Kotlin.
  *
- * There are two key methods: next() and nextToken(). While next() provides
- * access to high level parsing events, nextToken() allows access to lower
- * level tokens.
+ * There are two key methods: [next] and [nextToken]. While next() provides access to high level
+ * parsing events, nextToken() allows access to lower level tokens.
  *
- * The current event state of the parser
- * can be determined by calling the
- * [getEventType()](#getEventType()) method.
- * Initially, the parser is in the [START_DOCUMENT](#START_DOCUMENT)
- * state.
+ * The current event state of the parser can be determined by reading the [eventType] property.
+ * Initially, the parser is in the [START_DOCUMENT] state.
  *
- * The method [next()](#next()) advances the parser to the
- * next event. The int value returned from next determines the current parser
- * state and is identical to the value returned from following calls to
- * getEventType ().
+ * The method next() advances the parser to the next event. The enum value returned from next()
+ * determines the current parser state and is identical to the value returned from following calls
+ * to eventType.
+ *
+ * Th following event types are seen by next():
+ *
+ * - [EventType.START_TAG]: An XML start tag was read.
+ * - [EventType.TEXT]: Text content was read. The text content can be retrieved using the [text]
+ *      property (when in validating mode, [next] will not report ignorable whitespaces, use
+ *      [nextToken] instead).
+ * - [EventType.END_TAG]: An end tag was read.
+ * - [EventType.END_DOCUMENT]: No more events are available
  *
  *
- * Th following event types are seen by next()<dl>
- * <dt>[START_TAG](#START_TAG)</dt><dd> An XML start tag was read.
-</dd> * <dt>[TEXT](#TEXT)</dt><dd> Text content was read;
- * the text content can be retreived using the getText() method.
- * (when in validating mode next() will not report ignorable whitespaces, use nextToken() instead)
-</dd> * <dt>[END_TAG](#END_TAG)</dt><dd> An end tag was read
-</dd> * <dt>[END_DOCUMENT](#END_DOCUMENT)</dt><dd> No more events are available
-</dd></dl> *
- *
- * @author [Stefan Haustein](http://www-ai.cs.uni-dortmund.de/PERSONAL/haustein.html)
+ * @author [Stefan Haustein](http://www.stefan-haustein.com)
  * @author [Aleksander Slominski](http://www.extreme.indiana.edu/~aslom/)
  */
 interface XmlPullParser {
     val lastError: String
 
     /**
-     * Returns the numbers of elements in the namespace stack for the given
-     * depth.
+     * Returns the numbers of elements in the namespace stack for the give depth.
      * If namespaces are not enabled, 0 is returned.
      *
-     *
-     * **NOTE:** when parser is on END_TAG then it is allowed to call
-     * this function with getDepth()+1 argument to retrieve position of namespace
+     * **NOTE:** when the parser is on END_TAG, then it is allowed to call
+     * this function with getDepth()+1 argument to retrieve positions of namespace
      * prefixes and URIs that were declared on corresponding START_TAG.
      *
-     * **NOTE:** to retrieve lsit of namespaces declared in current element:<pre>
+     * **NOTE:** to retrieve list of namespaces declared in current element:
+     * ```
      * val pp = ...
      * val nsStart = pp.getNamespaceCount(pp.getDepth()-1)
      * val nsEnd = pp.getNamespaceCount(pp.getDepth())
@@ -54,26 +48,22 @@ interface XmlPullParser {
      *   val ns = pp.getNamespaceUri(i);
      * // ...
      * }
-     * </pre>
+     * ```
      */
     fun getNamespaceCount(depth: Int): Int
 
     /**
-     * Returns the namespace prefix for the given position
-     * in the namespace stack.
+     * Returns the namespace prefix for the given position in the namespace stack.
      * Default namespace declaration (xmlns='...') will have an empty prefix.
      * If the given index is out of range, an exception is thrown.
      *
-     * **Please note:** when the parser is on an END_TAG,
-     * namespace prefixes that were declared
-     * in the corresponding START_TAG are still accessible
-     * although they are no longer in scope.
+     * **Please note:** when the parser is on an END_TAG, namespace prefixes that were declared
+     * in the corresponding START_TAG are still accessible although they are no longer in scope.
      */
     fun getNamespacePrefix(pos: Int): String
 
     /**
-     * Returns the namespace URI for the given position in the
-     * namespace stack.
+     * Returns the namespace URI for the given position in the namespace stack.
      * If the position is out of range, an exception is thrown.
      *
      * **NOTE:** when parser is on END_TAG then namespace prefixes that were declared
@@ -82,39 +72,32 @@ interface XmlPullParser {
     fun getNamespaceUri(pos: Int): String
 
     /**
-     * Returns the URI corresponding to the given prefix,
-     * depending on current state of the parser.
+     * Returns the URI corresponding to the given prefix, depending on current state of the parser.
      *
-     * If the prefix was not declared in the current scope,
-     * null is returned. The default namespace is included
-     * in the namespace table and is available via
-     * getNamespace (null).
+     * If the prefix was not declared in the current scope, null is returned. The default namespace
+     * is included in the namespace table and is available via getNamespace(null).
      *
      * This method is a convenience method for
-     *
-     * <pre>
+     * ```
      * for (int i = getNamespaceCount(getDepth ())-1; i >= 0; i--) {
      *   if (getNamespacePrefix(i).equals( prefix )) {
-     * return getNamespaceUri(i);
-     * }
+     *     return getNamespaceUri(i);
+     *   }
      * }
      * return null;
-    </pre> *
+     * ```
      *
-     *
-     * **Please note:** parser implementations
-     * may provide more efficient lookup, e.g. using a Hashtable.
-     * The 'xml' prefix is bound to "http://www.w3.org/XML/1998/namespace", as
-     * defined in the
-     * [Namespaces in XML](http://www.w3.org/TR/REC-xml-names/#ns-using)
+     * **Please note:** parser implementations may provide more efficient lookup, e.g. using a
+     * Hashtable. The 'xml' prefix is bound to "http://www.w3.org/XML/1998/namespace", as
+     * defined in the [Namespaces in XML](http://www.w3.org/TR/REC-xml-names/#ns-using)
      * specification. Analogous, the 'xmlns' prefix is resolved to
      * [http://www.w3.org/2000/xmlns/](http://www.w3.org/2000/xmlns/)
      *
-     * @see .getNamespaceCount
+     * @see [getNamespaceCount]
      *
-     * @see .getNamespacePrefix
+     * @see [getNamespacePrefix]
      *
-     * @see .getNamespaceUri
+     * @see [getNamespaceUri]
      */
     fun getNamespace(prefix: String): String? {
         for (i in getNamespaceCount(depth) - 1 downTo 0) {
@@ -128,90 +111,81 @@ interface XmlPullParser {
             else -> null
         }
     }
+
     // --------------------------------------------------------------------------
     // miscellaneous reporting methods
     /**
-     * Returns the current depth of the element.
-     * Outside the root element, the depth is 0. The
-     * depth is incremented by 1 when a start tag is reached.
-     * The depth is decremented AFTER the end tag
-     * event was observed.
+     * Returns the current depth of the element. Outside the root element, the depth is 0. The
+     * depth is incremented by 1 when a start tag is reached. The depth is decremented AFTER the
+     * end tag event was observed.
      *
-     * <pre>
-     * &lt;!-- outside --&gt;     0
-     * &lt;root>                  1
-     * sometext                 1
-     * &lt;foobar&gt;         2
-     * &lt;/foobar&gt;        2
-     * &lt;/root&gt;              1
-     * &lt;!-- outside --&gt;     0
-    </pre> *
+     * ```
+     * <!-- outside -->     0
+     * <root>               1
+     * sometext             1
+     * <foobar>             2
+     * </foobar>            2
+     * </root>              1
+     * <!-- outside -->     0
+     * ```
      */
     val depth: Int
 
     /**
-     * Returns a short text describing the current parser state, including
-     * the position, a
-     * description of the current event and the data source if known.
-     * This method is especially useful to provide meaningful
-     * error messages and for debugging purposes.
+     * Returns a short text describing the current parser state, including the position, a
+     * description of the current event and the data source if known. This method is especially
+     * useful to provide meaningful error messages and for debugging purposes.
      */
     val positionDescription: String
 
     /**
      * Returns the current line number, starting from 1.
-     * When the parser does not know the current line number
-     * or can not determine it,  -1 is returned (e.g. for WBXML).
+     *
+     * When the parser does not know the current line number or can not determine it, -1 is returned
+     * (e.g. for WBXML).
      *
      * @return current line number or -1 if unknown.
      */
     val lineNumber: Int
 
     /**
-     * Returns the current column number, starting from 0.
-     * When the parser does not know the current column number
-     * or can not determine it,  -1 is returned (e.g. for WBXML).
+     * Returns the current column number, starting from 0. When the parser does not know the
+     * current column number or can not determine it, -1 is returned (e.g. for WBXML).
      *
      * @return current column number or -1 if unknown.
      */
     val columnNumber: Int
 
     // --------------------------------------------------------------------------
-    // TEXT related methods
+    // TEXT related methods & properties
     /**
-     * Checks whether the current TEXT event contains only whitespace
-     * characters.
-     * For IGNORABLE_WHITESPACE, this is always true.
-     * For TEXT and CDSECT, false is returned when the current event text
-     * contains at least one non-white space character. For any other
-     * event type an exception is thrown.
+     * Checks whether the current TEXT event contains only whitespace characters.
      *
+     * - For IGNORABLE_WHITESPACE, this is always true.
+     * - For TEXT and CDSECT, false is returned when the current event text
+     *   contains at least one non-white space character. For any other
+     *   event type an exception is thrown.
      *
-     * **Please note:** non-validating parsers are not
-     * able to distinguish whitespace and ignorable whitespace,
-     * except from whitespace outside the root element. Ignorable
-     * whitespace is reported as separate event, which is exposed
-     * via nextToken only.
-     *
+     * **Please note:** non-validating parsers are not able to distinguish whitespace and ignorable
+     * whitespace, except from whitespace outside the root element. Ignorable  whitespace is
+     * reported as separate event, which is exposed via nextToken only.
      */
     val isWhitespace: Boolean
 
     /**
      * Returns the text content of the current event as String.
-     * The value returned depends on current event type,
-     * for example for TEXT event it is element content
-     * (this is typical case when next() is used).
      *
-     * See description of nextToken() for detailed description of
-     * possible returned values for different types of events.
+     * The value returned depends on current event type, for example for TEXT event it is element
+     * content (this is typical case when next() is used).
      *
+     * See description of nextToken() for detailed description of possible returned values for
+     * different types of events.
      *
      * **NOTE:** in case of ENTITY_REF, this method returns
      * the entity replacement text (or null if not available). This is
-     * the only case where
-     * getText() and getTextCharacters() return different values.
+     * the only case where text and getTextCharacters() return different values.
      *
-     * @see .getEventType
+     * @see .eventType
      *
      * @see .next
      *
@@ -222,43 +196,36 @@ interface XmlPullParser {
     // --------------------------------------------------------------------------
     // START_TAG / END_TAG shared methods
     /**
-     * Returns the namespace URI of the current element.
-     * The default namespace is represented
-     * as empty string.
-     * If namespaces are not enabled, an empty String ("") is always returned.
-     * The current event must be START_TAG or END_TAG; otherwise,
-     * null is returned.
+     * Returns the namespace URI of the current element. The default namespace is represented
+     * as empty string. If namespaces are not enabled, an empty string ("") is always returned.
+     * The current event must be START_TAG or END_TAG; otherwise, an empty string is returned.
      */
     val namespace: String
 
     /**
-     * For START_TAG or END_TAG events, the (local) name of the current
-     * element is returned when namespaces are enabled. When namespace
-     * processing is disabled, the raw name is returned.
-     * For ENTITY_REF events, the entity name is returned.
-     * If the current event is not START_TAG, END_TAG, or ENTITY_REF,
-     * an empty string is returned.
+     * For START_TAG or END_TAG events, the (local) name of the current element is returned when
+     * namespaces are enabled. When namespace processing is disabled, the raw name is returned.
+     * For ENTITY_REF events, the entity name is returned. If the current event is not START_TAG,
+     * END_TAG, or ENTITY_REF, an empty string is returned.
      *
      * **Please note:** To reconstruct the raw element name
      * when namespaces are enabled and the prefix is not empty,
-     * you will need to  add the prefix and a colon to localName..
-     *
+     * you will need to  add the prefix and a colon to localName.
      */
     val name: String
 
     /**
      * Returns the prefix of the current element.
-     * If the element is in the default namespace (has no prefix),
-     * an empty string is returned.
      *
-     * If namespaces are not enabled, or the current event
-     * is not START_TAG or END_TAG, an empty string is returned.
+     * If the element is in the default namespace (has no prefix), an empty string is returned.
+     *
+     * If namespaces are not enabled, or the current event is not START_TAG or END_TAG, an empty
+     * string is returned.
      */
     val prefix: String
 
     /**
-     * Returns true if the current event is START_TAG and the tag
-     * is degenerated
+     * Returns true if the current event is START_TAG and the tag is degenerated
      * (e.g. &lt;foobar/&gt;); false otherwise.
      */
     val isEmptyElementTag: Boolean
@@ -280,13 +247,11 @@ interface XmlPullParser {
     val attributeCount: Int
 
     /**
-     * Returns the namespace URI of the attribute
-     * with the given index (starts from 0).
-     * Returns an empty string ("") if namespaces are not enabled
-     * or the attribute has no namespace.
-     * Throws an IndexOutOfBoundsException if the index is out of range
-     * or the current event type is not START_TAG.
+     * Returns the namespace URI of the attribute with the given index (starts from 0).
      *
+     * Returns an empty string ("") if namespaces are not enabled or the attribute has no namespace.
+     * Throws an IndexOutOfBoundsException if the index is out of range or the current event type is
+     * not START_TAG.
      *
      * **NOTE:** if FEATURE_REPORT_NAMESPACE_ATTRIBUTES is set
      * then namespace attributes (xmlns:ns='...') must be reported
@@ -299,7 +264,7 @@ interface XmlPullParser {
      * [Namespaces in XML](http://www.w3.org/TR/REC-xml-names/#ns-using)
      * specification to "http://www.w3.org/XML/1998/namespace".
      *
-     * @param zero based index of attribute
+     * @param index zero-based index of attribute
      * @return attribute namespace,
      * empty string ("") is returned  if namesapces processing is not enabled or
      * namespaces processing is enabled but attribute has no namespace (it has no prefix).
@@ -307,31 +272,34 @@ interface XmlPullParser {
     fun getAttributeNamespace(index: Int): String?
 
     /**
-     * Returns the local name of the specified attribute
-     * if namespaces are enabled or just attribute name if namespaces are disabled.
-     * Throws an IndexOutOfBoundsException if the index is out of range
-     * or current event type is not START_TAG.
+     * Returns the local name of the specified attribute if namespaces are enabled or just
+     * attribute name if namespaces are disabled.
      *
-     * @param zero based index of attribute
+     * Throws an IndexOutOfBoundsException if the index is out of range or current event type is
+     * not START_TAG.
+     *
+     * @param index zero-based index of attribute
      * @return attribute name (null is never returned)
      */
     fun getAttributeName(index: Int): String
 
     /**
-     * Returns the prefix of the specified attribute
+     * Returns the prefix of the specified attribute.
+     *
      * Returns an empty string if the element has no prefix.
      * If namespaces are disabled it will always return an empty string.
      *
      * Throws an IndexOutOfBoundsException if the index is out of range
      * or current event type is not START_TAG.
      *
-     * @param zero based index of attribute
+     * @param index zero-based index of attribute
      * @return attribute prefix or null if namespaces processing is not enabled.
      */
     fun getAttributePrefix(index: Int): String
 
     /**
-     * Returns the type of the specified attribute
+     * Returns the type of the specified attribute.
+     *
      * If parser is non-validating it MUST return CDATA.
      *
      * @param zero based index of attribute
@@ -360,7 +328,7 @@ interface XmlPullParser {
      * [XML 1.0 section
  * 3.3.3 Attribute-Value Normalization](http://www.w3.org/TR/REC-xml#AVNormalize)
      *
-     * @see .defineEntityReplacementText
+     * @see defineEntityReplacementText
      *
      *
      * @param zero based index of attribute
@@ -542,7 +510,7 @@ interface XmlPullParser {
      *
      * Essentially it does this
      * <pre>
-     * if (type != getEventType()
+     * if (type != eventType
      * || (namespace != null &amp;&amp;  !namespace.equals( getNamespace () ) )
      * || (name != null &amp;&amp;  !name.equals( getName() ) ) )
      * throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
@@ -574,7 +542,7 @@ interface XmlPullParser {
      *
      * Essentially it does this
      * <pre>
-     * if(getEventType() != START_TAG) {
+     * if(eventType != START_TAG) {
      * throw new XmlPullParserException(
      * "parser must be on START_TAG to read next text", this, null);
      * }
