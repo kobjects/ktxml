@@ -32,6 +32,7 @@ interface XmlPullParser {
 
     /**
      * Returns the numbers of elements in the namespace stack for the give depth.
+     *
      * If namespaces are not enabled, 0 is returned.
      *
      * **NOTE:** when the parser is on END_TAG, then it is allowed to call
@@ -54,6 +55,7 @@ interface XmlPullParser {
 
     /**
      * Returns the namespace prefix for the given position in the namespace stack.
+     *
      * Default namespace declaration (xmlns='...') will have an empty prefix.
      * If the given index is out of range, an exception is thrown.
      *
@@ -64,6 +66,7 @@ interface XmlPullParser {
 
     /**
      * Returns the namespace URI for the given position in the namespace stack.
+     *
      * If the position is out of range, an exception is thrown.
      *
      * **NOTE:** when parser is on END_TAG then namespace prefixes that were declared
@@ -114,6 +117,8 @@ interface XmlPullParser {
 
     // --------------------------------------------------------------------------
     // miscellaneous reporting methods
+    // --------------------------------------------------------------------------
+
     /**
      * Returns the current depth of the element. Outside the root element, the depth is 0. The
      * depth is incremented by 1 when a start tag is reached. The depth is decremented AFTER the
@@ -158,6 +163,8 @@ interface XmlPullParser {
 
     // --------------------------------------------------------------------------
     // TEXT related methods & properties
+    // --------------------------------------------------------------------------
+
     /**
      * Checks whether the current TEXT event contains only whitespace characters.
      *
@@ -185,16 +192,17 @@ interface XmlPullParser {
      * the entity replacement text (or null if not available). This is
      * the only case where text and getTextCharacters() return different values.
      *
-     * @see .eventType
+     * @see eventType
      *
-     * @see .next
+     * @see next
      *
-     * @see .nextToken
+     * @see nextToken
      */
     val text: String
 
     // --------------------------------------------------------------------------
     // START_TAG / END_TAG shared methods
+
     /**
      * Returns the namespace URI of the current element. The default namespace is represented
      * as empty string. If namespaces are not enabled, an empty string ("") is always returned.
@@ -225,24 +233,23 @@ interface XmlPullParser {
     val prefix: String
 
     /**
-     * Returns true if the current event is START_TAG and the tag is degenerated
+     * True if the current event is START_TAG and the tag is degenerated
      * (e.g. &lt;foobar/&gt;); false otherwise.
      */
     val isEmptyElementTag: Boolean
 
     // --------------------------------------------------------------------------
     // START_TAG Attributes retrieval methods
+    // --------------------------------------------------------------------------
+
     /**
-     * Returns the number of attributes of the current start tag, or
+     * The number of attributes of the current start tag, or
      * -1 if the current event type is not START_TAG
      *
-     * @see .getAttributeNamespace
-     *
-     * @see .getAttributeName
-     *
-     * @see .getAttributePrefix
-     *
-     * @see .getAttributeValue
+     * @see getAttributeNamespace
+     * @see getAttributeName
+     * @see getAttributePrefix
+     * @see getAttributeValue
      */
     val attributeCount: Int
 
@@ -260,7 +267,7 @@ interface XmlPullParser {
      * (visit this URL for description!).
      * The default namespace attribute (xmlns="...") will be reported with empty namespace.
      *
-     * **NOTE:**The xml prefix is bound as defined in
+     * **NOTE:** The xml prefix is bound as defined in
      * [Namespaces in XML](http://www.w3.org/TR/REC-xml-names/#ns-using)
      * specification to "http://www.w3.org/XML/1998/namespace".
      *
@@ -319,6 +326,7 @@ interface XmlPullParser {
 
     /**
      * Returns the given attributes value.
+     *
      * Throws an IndexOutOfBoundsException if the index is out of range
      * or current event type is not START_TAG.
      *
@@ -326,12 +334,11 @@ interface XmlPullParser {
      * **NOTE:** attribute value must be normalized
      * (including entity replacement text if PROCESS_DOCDECL is false) as described in
      * [XML 1.0 section
- * 3.3.3 Attribute-Value Normalization](http://www.w3.org/TR/REC-xml#AVNormalize)
+     * 3.3.3 Attribute-Value Normalization](http://www.w3.org/TR/REC-xml#AVNormalize)
      *
      * @see defineEntityReplacementText
      *
-     *
-     * @param zero based index of attribute
+     * @param index zero based index of attribute
      * @return value of attribute (null is never returned)
      */
     fun getAttributeValue(index: Int): String
@@ -341,14 +348,10 @@ interface XmlPullParser {
      * If namespaces are disabled namespace must be null.
      * If current event type is not START_TAG then IndexOutOfBoundsException will be thrown.
      *
-     *
      * **NOTE:** attribute value must be normalized
      * (including entity replacement text if PROCESS_DOCDECL is false) as described in
      * [XML 1.0 section
- * 3.3.3 Attribute-Value Normalization](http://www.w3.org/TR/REC-xml#AVNormalize)
-     *
-     * @see .defineEntityReplacementText
-     *
+     * 3.3.3 Attribute-Value Normalization](http://www.w3.org/TR/REC-xml#AVNormalize)
      *
      * @param namespace Namespace of the attribute if namespaces are enabled otherwise must be empty
      * @param name If namespaces enabled local name of attribute otherwise just attribute name
@@ -358,13 +361,16 @@ interface XmlPullParser {
         namespace: String,
         name: String
     ): String?
+
     // --------------------------------------------------------------------------
     // actual parsing methods
+    // --------------------------------------------------------------------------
+
     /**
      * Returns the type of the current event (START_TAG, END_TAG, TEXT, etc.)
      *
-     * @see .next
-     * @see .nextToken
+     * @see next
+     * @see nextToken
      */
     val eventType: EventType
 
@@ -381,15 +387,11 @@ interface XmlPullParser {
      * parsing equivalency of empty element to &lt;tag>&lt;/tag>.
      * (see isEmptyElementTag ())
      *
-     * @see .isEmptyElementTag
-     *
-     * @see .START_TAG
-     *
-     * @see .TEXT
-     *
-     * @see .END_TAG
-     *
-     * @see .END_DOCUMENT
+     * @see isEmptyElementTag
+     * @see EventType.START_TAG
+     * @see EventType.TEXT
+     * @see EventType.END_TAG
+     * @see EventType.END_DOCUMENT
      */
     fun next(): EventType
 
@@ -398,123 +400,68 @@ interface XmlPullParser {
      * additional event types (COMMENT, CDSECT, DOCDECL, ENTITY_REF, PROCESSING_INSTRUCTION, or
      * IGNORABLE_WHITESPACE) if they are available in input.
      *
-     *
-     * If special feature
-     * [FEATURE_XML_ROUNDTRIP](http://xmlpull.org/v1/doc/features.html#xml-roundtrip)
-     * (identified by URI: http://xmlpull.org/v1/doc/features.html#xml-roundtrip)
-     * is enabled it is possible to do XML document round trip ie. reproduce
-     * exectly on output the XML input using getText():
-     * returned content is always unnormalized (exactly as in input).
-     * Otherwise returned content is end-of-line normalized as described
+     * The returned content is end-of-line normalized as described
      * [XML 1.0 End-of-Line Handling](http://www.w3.org/TR/REC-xml#sec-line-ends)
-     * and. Also when this feature is enabled exact content of START_TAG, END_TAG,
-     * DOCDECL and PROCESSING_INSTRUCTION is available.
-     *
+     * and.
      *
      * Here is the list of tokens that can be  returned from nextToken()
-     * and what getText() and getTextCharacters() returns:<dl>
-     * <dt>START_DOCUMENT</dt><dd>null
-    </dd> * <dt>END_DOCUMENT</dt><dd>null
-    </dd> * <dt>START_TAG</dt><dd>null unless FEATURE_XML_ROUNDTRIP
-     * enabled and then returns XML tag, ex: &lt;tag attr='val'>
-    </dd> * <dt>END_TAG</dt><dd>null unless FEATURE_XML_ROUNDTRIP
-     * id enabled and then returns XML tag, ex: &lt;/tag>
-    </dd> * <dt>TEXT</dt><dd>return element content.
-     * <br></br>Note: that element content may be delivered in multiple consecutive TEXT events.
-    </dd> * <dt>IGNORABLE_WHITESPACE</dt><dd>return characters that are determined to be ignorable white
-     * space. If the FEATURE_XML_ROUNDTRIP is enabled all whitespace content outside root
-     * element will always reported as IGNORABLE_WHITESPACE otherise rteporting is optional.
-     * <br></br>Note: that element content may be delevered in multiple consecutive IGNORABLE_WHITESPACE events.
-    </dd> * <dt>CDSECT</dt><dd>
-     * return text *inside* CDATA
-     * (ex. 'fo&lt;o' from &lt;!CDATA[fo&lt;o]]>)
-    </dd> * <dt>PROCESSING_INSTRUCTION</dt><dd>
-     * if FEATURE_XML_ROUNDTRIP is true
-     * return exact PI content ex: 'pi foo' from &lt;?pi foo?>
-     * otherwise it may be exact PI content or concatenation of PI target,
-     * space and data so for example for
-     * &lt;?target    data?> string &quot;target data&quot; may
-     * be returned if FEATURE_XML_ROUNDTRIP is false.
-    </dd> * <dt>COMMENT</dt><dd>return comment content ex. 'foo bar' from &lt;!--foo bar-->
-    </dd> * <dt>ENTITY_REF</dt><dd>getText() MUST return entity replacement text if PROCESS_DOCDECL is false
-     * otherwise getText() MAY return null,
-     * additionally getTextCharacters() MUST return entity name
-     * (for example 'entity_name' for &amp;entity_name;).
-     * <br></br>**NOTE:** this is the only place where value returned from getText() and
-     * getTextCharacters() **are different**
-     * <br></br>**NOTE:** it is user responsibility to resolve entity reference
-     * if PROCESS_DOCDECL is false and there is no entity replacement text set in
-     * defineEntityReplacementText() method (getText() will be null)
-     * <br></br>**NOTE:** character entities (ex. &amp;#32;) and standard entities such as
-     * &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos; are reported as well
-     * and are **not** reported as TEXT tokens but as ENTITY_REF tokens!
-     * This requirement is added to allow to do roundtrip of XML documents!
-    </dd> * <dt>DOCDECL</dt><dd>
-     * if FEATURE_XML_ROUNDTRIP is true or PROCESS_DOCDECL is false
-     * then return what is inside of DOCDECL for example it returns:<pre>
-     * &quot; titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
-     * [&lt;!ENTITY % active.links "INCLUDE">]&quot;</pre>
+     * and what text returns:
      *
-     * for input document that contained:<pre>
-     * &lt;!DOCTYPE titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
-     * [&lt;!ENTITY % active.links "INCLUDE">]></pre>
-     * otherwise if FEATURE_XML_ROUNDTRIP is false and PROCESS_DOCDECL is true
-     * then what is returned is undefined (it may be even null)
-    </dd> *
-    </dl> *
-     *
-     *
-     * **NOTE:** there is no gurantee that there will only one TEXT or
+     * - START_DOCUMENT: ""
+     * - XML_DECL: ""
+     * - END_DOCUMENT: ""
+     * - START_TAG: ""
+     * - END_TAG:
+     * - TEXT: The element content. Note that element content may be delivered in multiple
+     *   consecutive TEXT events.
+     * - IGNORABLE_WHITESPACE: Characters that are determined to be ignorable white
+     *   space. Note that element content may be delevered in multiple consecutive
+     *   IGNORABLE_WHITESPACE events.
+     * - CDSECT: The text *inside* CDATA (ex. 'fo&lt;o' from &lt;!CDATA[fo&lt;o]]>)
+     * - PROCESSING_INSTRUCTION: PI content or concatenation of PI target,
+     *   space and data.
+     * - COMMENT: Comment content ex. 'foo bar' from &lt;!--foo bar-->
+     * - ENTITY_REF: text MUST return the entity replacement
+     * - DOCDECL: Content of the document declaration.
+     **
+     * **NOTE:** there is no guarantee that there will only one TEXT or
      * IGNORABLE_WHITESPACE event from nextToken() as parser may chose to deliver element content in
      * multiple tokens (dividing element content into chunks)
      *
-     *
-     * **NOTE:** whether returned text of token is end-of-line normalized
-     * is depending on FEATURE_XML_ROUNDTRIP.
-     *
-     *
-     * **NOTE:** XMLDecl (&lt;?xml ...?&gt;) is not reported but its content
-     * is available through optional properties (see class description above).
-     *
-     * @see .next
-     *
-     * @see .START_TAG
-     *
-     * @see .TEXT
-     *
-     * @see .END_TAG
-     *
-     * @see .END_DOCUMENT
-     *
-     * @see .COMMENT
-     *
-     * @see .DOCDECL
-     *
-     * @see .PROCESSING_INSTRUCTION
-     *
-     * @see .ENTITY_REF
-     *
-     * @see .IGNORABLE_WHITESPACE
+     * @see next
+     * @see EventType.START_TAG
+     * @see EventType.TEXT
+     * @see EventType.END_TAG
+     * @see EventType.END_DOCUMENT
+     * @see EventType.COMMENT
+     * @see EventType.DOCDECL
+     * @see EventType.PROCESSING_INSTRUCTION
+     * @see EventType.ENTITY_REF
+     * @see EventType.IGNORABLE_WHITESPACE
      */
     fun nextToken(): EventType
+
     //-----------------------------------------------------------------------------
-    // utility methods to mak XML parsing easier ...
+    // utility methods to make XML parsing easier ...
+    //-----------------------------------------------------------------------------
+
     /**
      * Test if the current event is of the given type and if the
-     * namespace and name do match. null will match any namespace
+     * namespace and name do match.
+     *
+     * null will match any namespace
      * and any name. If the test is not passed, an exception is
      * thrown. The exception text indicates the parser position,
      * the expected event and the current event that is not meeting the
      * requirement.
      *
-     *
      * Essentially it does this
-     * <pre>
+     * ```
      * if (type != eventType
-     * || (namespace != null &amp;&amp;  !namespace.equals( getNamespace () ) )
-     * || (name != null &amp;&amp;  !name.equals( getName() ) ) )
-     * throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
-    </pre> *
+     *     || (namespace != null &&  !namespace.equals(getNamespace()))
+     *     || (name != null && !name.equals( getName())))
+     *   throw new XmlPullParserException("Expected " + TYPES[type] + getPositionDescription());
+     *```
      */
     fun require(type: EventType?, namespace: String?, name: String?)
 
@@ -529,67 +476,64 @@ interface XmlPullParser {
      *  1. &lt;tag&gt;foo&lt;/tag&gt;
      *  1. &lt;tag&gt;&lt;/tag&gt; (which is equivalent to &lt;tag/&gt;
      * both input can be parsed with the same code:
-     * <pre>
+     * ```
      * p.nextTag()
      * p.requireEvent(p.START_TAG, "", "tag");
      * String content = p.nextText();
      * p.requireEvent(p.END_TAG, "", "tag");
-    </pre> *
+     *```
      * This function together with nextTag make it very easy to parse XML that has
      * no mixed content.
      *
-     *
-     *
      * Essentially it does this
-     * <pre>
+     * ```
      * if(eventType != START_TAG) {
-     * throw new XmlPullParserException(
-     * "parser must be on START_TAG to read next text", this, null);
+     *   throw new XmlPullParserException(
+     *       "parser must be on START_TAG to read next text", this, null);
      * }
-     * int eventType = next();
-     * if(eventType == TEXT) {
-     * String result = getText();
-     * eventType = next();
-     * if(eventType != END_TAG) {
-     * throw new XmlPullParserException(
-     * "event TEXT it must be immediately followed by END_TAG", this, null);
-     * }
-     * return result;
-     * } else if(eventType == END_TAG) {
-     * return "";
+     * var eventType = next();
+     * if (eventType == TEXT) {
+     *   String result = getText();
+     *   eventType = next();
+     *   if (eventType != END_TAG) {
+     *     throw new XmlPullParserException(
+     *         "event TEXT it must be immediately followed by END_TAG", this, null);
+     *   }
+     *   return result;
+     * } else if (eventType == END_TAG) {
+     *   return "";
      * } else {
-     * throw new XmlPullParserException(
-     * "parser must be on START_TAG or TEXT to read text", this, null);
+     *   throw new XmlPullParserException(
+     *       "parser must be on START_TAG or TEXT to read text", this, null);
      * }
-    </pre> *
+     * ```
      */
     fun nextText(): String
 
     /**
      * Call next() and return event if it is START_TAG or END_TAG
      * otherwise throw an exception.
+     *
      * It will skip whitespace TEXT before actual tag if any.
      *
-     *
      * essentially it does this
-     * <pre>
+     * ```
      * int eventType = next();
      * if(eventType == TEXT &amp;&amp;  isWhitespace()) {   // skip whitespace
-     * eventType = next();
+     *   eventType = next();
      * }
      * if (eventType != START_TAG &amp;&amp;  eventType != END_TAG) {
-     * throw new XmlPullParserException("expected start or end tag", this, null);
+     *   throw new XmlPullParserException("expected start or end tag", this, null);
      * }
      * return eventType;
-    </pre> *
+     * ```
      */
     fun nextTag(): EventType
 
-
-
     /**
      * Skip sub tree that is currently porser positioned on.
-     * <br></br>NOTE: parser must be on START_TAG and when funtion returns
+     *
+     * NOTE: parser must be on START_TAG and when this function returns the
      * parser will be positioned on corresponding END_TAG.
      */
     //	Implementation copied from Alek's mail...

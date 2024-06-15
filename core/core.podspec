@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'core'
-    spec.version                  = '0.2.4'
+    spec.version                  = '0.3.0'
     spec.homepage                 = 'https://github.com/kobjects/ktxml'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
