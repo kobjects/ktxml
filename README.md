@@ -4,7 +4,7 @@
 
 Minimal platform-agnostic non-validating XML pull parser based on kxml2.
 
-The most significant changes (relative to XmlPull / KXml2) are:
+The most significant changes (relative to XmlPull / [KXml2](https://github.com/kobjects/kxml2)) are:
 
 - Replaced the Reader as input with CharIterator support, as Java streams are not available for Kotlin native.
 - Reduced the number of places where null is returned
@@ -58,7 +58,8 @@ For a set of small code examples, please take a look at the [test](https://githu
 
 ## Use cases
 
-- [Twine RSS Reader Parsing Code](https://github.com/msasikanth/twine/tree/main/core/network/src/commonMain/kotlin/dev/sasikanth/rss/reader/core/network/parser)
+- [Twine RSS Reader](https://github.com/msasikanth/twine/)
+  ([Parsing Code](https://github.com/msasikanth/twine/tree/main/core/network/src/commonMain/kotlin/dev/sasikanth/rss/reader/core/network/parser))
 
 ## FAQ
 
