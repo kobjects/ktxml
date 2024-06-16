@@ -22,7 +22,7 @@ kotlin {
       sourceSets {
           val commonMain by getting {
               dependencies {
-                  implementation("org.kobjects.ktxml:core:0.2.4")
+                  implementation("org.kobjects.ktxml:core:0.3.1")
                   (...)
               }
           }
