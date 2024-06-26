@@ -1,11 +1,15 @@
 package org.kobjects.ktxml.api
 
+/**
+ * Enumeration of all even types reported by KtXml. Some event types are only
+ * reported when calling nextToken() (opposed to next()).
+ */
 enum class EventType {
     /**
-     * Signalize that parser is at the very beginning of the document and nothing was read yet.
+     * The parser is at the very beginning of the document and nothing was read yet.
      *
      * This event type can only be observed by reading eventType before the first call to next(),
-     * nextToken, or nextTag()).
+     * nextToken(), or nextTag()).
      */
     START_DOCUMENT,
 
