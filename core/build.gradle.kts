@@ -2,11 +2,23 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("convention.publication")
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 
 group = "org.kobjects.ktxml"
 version = "0.3.1"
+
+
+tasks.dokkaHtml {
+    moduleName.set("KtXml")
+    outputDirectory.set(layout.buildDirectory.dir("dokka"))
+    dokkaSourceSets {
+        configureEach {
+            includes.from("../modules.md")
+        }
+    }
+}
 
 
 kotlin {

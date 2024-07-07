@@ -24,21 +24,20 @@ class MiniXmlPullParser(
     ) : this(source.iterator(), processNamespaces, relaxed, entityResolver)
 
     companion object {
-        const val CARRIAGE_RETURN_CODE = 13
-        const val NEWLINE_CODE = 10
+        private const val CARRIAGE_RETURN_CODE = 13
+        private const val NEWLINE_CODE = 10
 
-        const val UNEXPECTED_EOF = "Unexpected EOF"
-        const val ILLEGAL_TYPE = "Wrong event type";
+        private const val UNEXPECTED_EOF = "Unexpected EOF"
 
-        fun <T> arraycopy(src: Array<T>, srcPos: Int, dst: Array<T>, dstPos: Int, count: Int) {
+        private fun <T> arraycopy(src: Array<T>, srcPos: Int, dst: Array<T>, dstPos: Int, count: Int) {
             src.copyInto(dst, dstPos, srcPos, srcPos + count)
         }
 
-        fun arraycopy(src: IntArray, srcPos: Int, dst: IntArray, dstPos: Int, count: Int) {
+        private fun arraycopy(src: IntArray, srcPos: Int, dst: IntArray, dstPos: Int, count: Int) {
             src.copyInto(dst, dstPos, srcPos, srcPos + count)
         }
 
-        fun arraycopy(src: CharArray, srcPos: Int, dst: CharArray, dstPos: Int, count: Int) {
+        private fun arraycopy(src: CharArray, srcPos: Int, dst: CharArray, dstPos: Int, count: Int) {
             src.copyInto(dst, dstPos, srcPos, srcPos + count)
         }
 
@@ -675,136 +674,6 @@ class MiniXmlPullParser(
 
     // public part starts here...
 
-    /* turn into ctor!
-    fun setInput(reader: Reader) {
-        this.reader = reader
-        line = 1
-        column = 0
-        eventType = EventType.START_DOCUMENT
-        name = ""
-        namespace = ""
-        isEmptyElementTag = false
-        attributeCount = -1
-
-        if (reader == null) return
-        srcPos = 0
-        srcCount = 0
-        peekCount = 0
-        depth = 0
-    }
-
-    @Throws(XmlPullParserException::class)
-    fun setInput(`is`: InputStream?, _enc: String) {
-        srcPos = 0
-        srcCount = 0
-        var enc = _enc
-        requireNotNull(`is`)
-        try {
-            if (enc == null) {
-                // read four bytes
-                var chk = 0
-                while (srcCount < 4) {
-                    val i: Int = `is`.read()
-                    if (i == -1) break
-                    chk = chk shl 8 or i
-                    srcBuf[srcCount++] = i.toChar()
-                }
-                if (srcCount == 4) {
-                    when (chk) {
-                        0x00000FEFF -> {
-                            enc = "UTF-32BE"
-                            srcCount = 0
-                        }
-                        -0x20000 -> {
-                            enc = "UTF-32LE"
-                            srcCount = 0
-                        }
-                        0x03c -> {
-                            enc = "UTF-32BE"
-                            srcBuf[0] = '<'
-                            srcCount = 1
-                        }
-                        0x03c000000 -> {
-                            enc = "UTF-32LE"
-                            srcBuf[0] = '<'
-                            srcCount = 1
-                        }
-                        0x0003c003f -> {
-                            enc = "UTF-16BE"
-                            srcBuf[0] = '<'
-                            srcBuf[1] = '?'
-                            srcCount = 2
-                        }
-                        0x03c003f00 -> {
-                            enc = "UTF-16LE"
-                            srcBuf[0] = '<'
-                            srcBuf[1] = '?'
-                            srcCount = 2
-                        }
-                        0x03c3f786d -> {
-                            while (true) {
-                                val i: Int = `is`.read()
-                                if (i == -1) break
-                                srcBuf[srcCount++] = i.toChar()
-                                if (i == '>'.code) {
-                                    val s = String(srcBuf, 0, srcCount)
-                                    var i0 = s.indexOf("encoding")
-                                    if (i0 != -1) {
-                                        while (s[i0] != '"'
-                                            && s[i0] != '\''
-                                        ) i0++
-                                        val deli = s[i0++]
-                                        val i1 = s.indexOf(deli, i0)
-                                        enc = s.substring(i0, i1)
-                                    }
-                                    break
-                                }
-                            }
-                            if (chk and -0x10000 == -0x1010000) {
-                                enc = "UTF-16BE"
-                                srcBuf[0] = (srcBuf[2] shl 8 or srcBuf[3]) as Char
-                                srcCount = 1
-                            } else if (chk and -0x10000 == -0x20000) {
-                                enc = "UTF-16LE"
-                                srcBuf[0] = (srcBuf[3] shl 8 or srcBuf[2]) as Char
-                                srcCount = 1
-                            } else if (chk and -0x100 == -0x10444100) {
-                                enc = "UTF-8"
-                                srcBuf[0] = srcBuf[3]
-                                srcCount = 1
-                            }
-                        }
-                        else -> if (chk and -0x10000 == -0x1010000) {
-                            enc = "UTF-16BE"
-                            srcBuf[0] = (srcBuf[2] shl 8 or srcBuf[3]) as Char
-                            srcCount = 1
-                        } else if (chk and -0x10000 == -0x20000) {
-                            enc = "UTF-16LE"
-                            srcBuf[0] = (srcBuf[3] shl 8 or srcBuf[2]) as Char
-                            srcCount = 1
-                        } else if (chk and -0x100 == -0x10444100) {
-                            enc = "UTF-8"
-                            srcBuf[0] = srcBuf[3]
-                            srcCount = 1
-                        }
-                    }
-                }
-            }
-            if (enc == null) enc = "UTF-8"
-            val sc = srcCount
-            setInput(InputStreamReader(`is`, enc))
-            encoding = _enc
-            srcCount = sc
-        } catch (e: Exception) {
-            throw XmlPullParserException(
-                "Invalid stream or encoding: $e",
-                this,
-                e
-            )
-        }
-    }
-     */
-
     override fun getNamespaceCount(depth: Int): Int {
         if (depth > this.depth) throw IndexOutOfBoundsException()
         return nspCounts[depth]
@@ -927,34 +796,4 @@ class MiniXmlPullParser(
         return eventType
     }
 
-
-    //
-    // utility methods to make XML parsing easier ...
-    override fun nextTag(): EventType {
-        next()
-        if (eventType == EventType.TEXT && isWhitespace) next()
-        if (eventType !== EventType.END_TAG && eventType !== EventType.START_TAG) {
-            throw exception("unexpected event type")
-        }
-        return eventType
-    }
-
-    override fun require(type: EventType?, namespace: String?, name: String?) {
-        if (type != null && eventType != type || namespace != null && namespace != this.namespace
-            || name != null && name != this.name) {
-            throw exception("expected: $type {$namespace}$name")
-        }
-    }
-
-    override fun nextText(): String {
-        if (eventType !== EventType.START_TAG) exception("precondition: START_TAG")
-        next()
-        val result: String
-        if (eventType === EventType.TEXT) {
-            result = text
-            next()
-        } else result = ""
-        if (eventType !== EventType.END_TAG) exception("END_TAG expected")
-        return result
-    }
 }

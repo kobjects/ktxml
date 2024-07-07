@@ -463,7 +463,14 @@ interface XmlPullParser {
      *   throw new XmlPullParserException("Expected " + TYPES[type] + getPositionDescription());
      *```
      */
-    fun require(type: EventType?, namespace: String?, name: String?)
+    fun require(type: EventType?, namespace: String?, name: String?) {
+        if (type != null && eventType != type || namespace != null && namespace != this.namespace
+            || name != null && name != this.name) {
+            throw XmlPullParserException(
+                "expected: $type {$namespace}$name", positionDescription, lineNumber, columnNumber
+            )
+        }
+    }
 
     /**
      * If current event is START_TAG then if next element is TEXT then element content is returned
@@ -508,7 +515,21 @@ interface XmlPullParser {
      * }
      * ```
      */
-    fun nextText(): String
+    fun nextText(): String {
+        if (eventType !== EventType.START_TAG) XmlPullParserException(
+            "precondition: START_TAG", positionDescription, lineNumber, columnNumber
+        )
+        next()
+        val result: String
+        if (eventType === EventType.TEXT) {
+            result = text
+            next()
+        } else result = ""
+        if (eventType !== EventType.END_TAG) XmlPullParserException(
+            "END_TAG expected", positionDescription, lineNumber, columnNumber
+        )
+        return result
+    }
 
     /**
      * Call next() and return event if it is START_TAG or END_TAG
@@ -528,7 +549,16 @@ interface XmlPullParser {
      * return eventType;
      * ```
      */
-    fun nextTag(): EventType
+    fun nextTag(): EventType {
+        next()
+        if (eventType == EventType.TEXT && isWhitespace) next()
+        if (eventType !== EventType.END_TAG && eventType !== EventType.START_TAG) {
+            throw XmlPullParserException(
+                "unexpected event type", positionDescription, lineNumber, columnNumber
+            )
+        }
+        return eventType
+    }
 
     /**
      * Skip sub tree that is currently porser positioned on.
