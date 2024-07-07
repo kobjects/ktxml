@@ -7,7 +7,7 @@ plugins {
 
 
 group = "org.kobjects.ktxml"
-version = "0.3.1"
+version = "0.3.2"
 
 
 tasks.dokkaHtml {
@@ -15,7 +15,7 @@ tasks.dokkaHtml {
     outputDirectory.set(layout.buildDirectory.dir("dokka"))
     dokkaSourceSets {
         configureEach {
-            includes.from("../modules.md")
+            includes.from("module.md")
         }
     }
 }

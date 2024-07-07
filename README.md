@@ -22,7 +22,7 @@ kotlin {
       sourceSets {
           val commonMain by getting {
               dependencies {
-                  implementation("org.kobjects.ktxml:core:0.3.1")
+                  implementation("org.kobjects.ktxml:core:0.3.2")
                   (...)
               }
           }
@@ -55,6 +55,7 @@ Please always use the interface (XmlPullParser) and never the concrete parser im
 
 For a set of small code examples, please take a look at the [test](https://github.com/kobjects/ktxml/blob/main/core/src/commonTest/kotlin/org/kobjects/ktxml/KtXmlTest.kt).
 
+For more information about the API, please refer to the [KtXml API documentation](https://kobjects.org/ktxml/dokka/).
 
 ## Use cases
 
