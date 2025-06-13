@@ -61,6 +61,7 @@ For more information about the API, please refer to the [KtXml API documentation
 
 - [Twine RSS Reader](https://github.com/msasikanth/twine/)
   ([Parsing Code](https://github.com/msasikanth/twine/tree/main/core/network/src/commonMain/kotlin/dev/sasikanth/rss/reader/core/network/parser))
+- [MapLibre Compose](https://github.com/maplibre/maplibre-compose) via [HtmlConverterCompose](https://github.com/cbeyls/HtmlConverterCompose). 
 
 ## FAQ
 
