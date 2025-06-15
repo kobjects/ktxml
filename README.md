@@ -74,16 +74,16 @@ See https://github.com/kobjects/ktxml/issues/6
 If you are missing anything from kXML2, please file a feature request by creating a corresponding
 issue in the github issue tracker.
 
-### I have a different problem!
-
-Please file an issue using the github issue tracker.
-
 ### I have a Pull Request for an Improvement
 
 Please file an issue before creating a PR.
 
 Please try to keep PRs as "atomic" as possible, i.e. addressing one issue only. I can push library / Kotlin / Gradle versions up as needed beforehand where this helps.
 
+
+### I have a different problem!
+
+Please file an issue using the github issue tracker.
 
 # Background / Design
 
