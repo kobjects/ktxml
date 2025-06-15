@@ -11,7 +11,7 @@ plugins {
 
 
 group = "org.kobjects.ktxml"
-version = "0.3.2"
+version = "1.0.0"
 
 
 tasks.dokkaHtml {
@@ -23,7 +23,6 @@ tasks.dokkaHtml {
         }
     }
 }
-
 
 kotlin {
     jvm {
