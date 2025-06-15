@@ -1,3 +1,7 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -22,18 +26,55 @@ tasks.dokkaHtml {
 
 
 kotlin {
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
     jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_1_8
         }
     }
+
     js(IR) {
-        //  useCommonJs()
         browser()
+        nodejs()
     }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        nodejs()
+        d8()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmWasi {
+        nodejs()
+    }
+
+    // https://kotlinlang.org/docs/native-target-support.html#tier-1
+    macosX64()
+    macosArm64()
+    iosSimulatorArm64()
+    iosX64()
+    iosArm64()
+
+    // https://kotlinlang.org/docs/native-target-support.html#tier-2
+    linuxX64()
+    linuxArm64()
+    watchosSimulatorArm64()
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    tvosSimulatorArm64()
+    tvosX64()
+    tvosArm64()
+
+    // https://kotlinlang.org/docs/native-target-support.html#tier-3
+    mingwX64()
+    watchosDeviceArm64()
+    androidNativeX64()
+    androidNativeArm32()
+    androidNativeArm64()
+
+    applyDefaultHierarchyTemplate()
 
     cocoapods {
         summary = "Kotlin version of Kxml"
@@ -43,48 +84,10 @@ kotlin {
             baseName = "ktxml"
         }
     }
-    
+
     sourceSets {
-        val commonMain by getting
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
-
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
-
-        val jvmMain by getting
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-            }
-        }
-
-        val jsMain by getting
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
-
     }
 }

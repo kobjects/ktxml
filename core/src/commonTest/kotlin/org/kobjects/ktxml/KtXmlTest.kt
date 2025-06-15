@@ -62,6 +62,7 @@ class KtXmlTest {
         assertEquals(EventType.XML_DECL, parser.nextToken())
         assertEquals(EventType.START_TAG, parser.nextToken())
         assertEquals(EventType.END_TAG, parser.nextToken())
+        assertEquals(EventType.IGNORABLE_WHITESPACE, parser.nextToken())
         assertEquals(EventType.END_DOCUMENT, parser.nextToken())
     }
 }

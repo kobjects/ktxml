@@ -24,6 +24,7 @@ hs_err_pid*
 
 # Build dirs
 build/
+.kotlin/
 
 # Gradle local stuff
 local.properties
