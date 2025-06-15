@@ -78,6 +78,13 @@ issue in the github issue tracker.
 
 Please file an issue using the github issue tracker.
 
+### I have a Pull Request for an Improvement
+
+Please file an issue before creating a PR.
+
+Please try to keep PRs as "atomic" as possible, i.e. addressing one issue only. I can push library / Kotlin / Gradle versions up as needed beforehand where this helps.
+
+
 # Background / Design
 
 Brainstorming document: https://docs.google.com/document/d/1OXG5F5I-Gp-65cN8THWB1LMTZDnRS96CIBenPcusDDA/edit?usp=sharing
