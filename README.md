@@ -34,6 +34,10 @@ kotlin {
 KtXML is implemented in pure Kotlin, so it should work on all platforms supported by Kotlin.
 
 
+## News
+
+- 2025-06-15 Version bumped to 1.0 and artifacts for all platforms are now included in the Maven artifacts -- thanks to Sargun!
+
 ## Usage
 
 The most important calls in KtXml are `next()` and `nextToken()`. 
